@@ -16,6 +16,7 @@ export interface Assessment {
   selectedModules: string[];
 }
 
+
 export interface Course {
   name: string;
   modules: {
