@@ -6,6 +6,7 @@ import { getAssessments, getUser } from './services/api';
 import type { Assessment, User, PagedAssessments } from './types';
 import { Toaster } from './components/ui/sonner';
 import { toast } from 'sonner';
+import { ThemeProvider } from 'next-themes';
 import './styles/globals.css';
 
 type View = 'landing' | 'form' | 'results';
@@ -69,10 +70,10 @@ export default function App() {
   };
 
   return (
-    <>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Toaster position="top-right" closeButton />
       {currentView === 'landing' && (
-        <LandingPage 
+        <LandingPage
           {...commonProps}
           assessments={pagedAssessments?.assessments || []}
           onNavigateToFormativeAssessment={() => setCurrentView('form')}
@@ -99,6 +100,6 @@ export default function App() {
           onDownload={handleDownload}
         />
       )}
-    </>
+    </ThemeProvider>
   );
 }

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger 
 } from './ui/dropdown-menu';
 import { LogOut, User as UserIcon, ChevronDown } from 'lucide-react';
+import { ThemeToggle } from './theme-toggle';
 import type { User } from '../types';
 
 interface HeaderProps {
@@ -44,6 +45,7 @@ export function Header({
 
         {/* Right side - User info and actions */}
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           {/* User Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
