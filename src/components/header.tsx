@@ -30,9 +30,10 @@ export function Header({
         <div className="flex items-center space-x-4 cursor-pointer" onClick={onNavigateToLanding}>
           {/* SKF Logo */}
           <div className="flex items-center space-x-3">
-            <div className="flex items-center justify-center w-10 h-10 bg-primary rounded-lg">
-              <span className="text-white font-bold text-lg">SA</span>
-            </div>
+            <Avatar style={{objectFit: 'contain', width: '8%', height: '8%' }}>
+              <AvatarImage src="/src/logo/siksha-logo.png" alt="Siksha Logo" />
+              <AvatarFallback>S</AvatarFallback>
+            </Avatar>
             <div className="flex items-center space-x-2">
               <h1 className="text-xl font-semibold text-foreground">
                 {sectionName}

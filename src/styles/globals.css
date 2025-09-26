@@ -1,5 +1,7 @@
 @custom-variant dark (&:is(.dark *));
 
+body::-webkit-scrollbar { display: none; }
+
 :root {
   --font-size: 16px;
   --background: #ffffff;

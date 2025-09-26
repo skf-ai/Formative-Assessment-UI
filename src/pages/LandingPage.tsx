@@ -4,7 +4,8 @@ import { Button } from '../components/ui/button';
 import { Header } from '../components/header';
 import { AssessmentResults } from '../components/assessment-results';
 import type { Assessment, User } from '../types';
-import { BookOpen, GraduationCap, Factory, HardDrive, ArrowRight, List } from 'lucide-react';
+import { BookOpen, GraduationCap, Factory, HardDrive, List } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface LandingPageProps {
   assessments: Assessment[];
@@ -50,11 +51,11 @@ const actionCards = [
   }
 ];
 
-export function LandingPage({ 
-  assessments, 
-  onNavigateToFormativeAssessment, 
+export function LandingPage({
+  assessments,
+  onNavigateToFormativeAssessment,
   onNavigateToJobStatus,
-  onDownload, 
+  onDownload,
   onNavigateToLanding,
   user
 }: LandingPageProps) {
@@ -62,44 +63,38 @@ export function LandingPage({
     if (action === 'formative') {
       onNavigateToFormativeAssessment();
     } else {
-      // For now, show coming soon for other actions
-      alert(`${action} functionality coming soon!`);
+      toast.info(`The "${action}" functionality is coming soon!`);
     }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header sectionName="Siddhanta AI Tools" user={user} onNavigateToLanding={onNavigateToLanding} />
-      
+
       <div className="p-6">
         <div className="max-w-7xl mx-auto space-y-12">
           {/* Welcome Section */}
-          <div className="text-center space-y-6 py-12">
-            {/* Logo */}
-            <div className="flex justify-center mb-8" onClick={onNavigateToLanding} style={{ cursor: 'pointer' }}>
-              <div className="flex items-center justify-center w-20 h-20 bg-primary rounded-2xl shadow-lg">
-                <span className="text-white font-bold text-3xl">SA</span>
-              </div>
+          <div className="text-center space-y-2">
+            <div className="flex justify-center mb-6 " onClick={onNavigateToLanding} style={{ cursor: 'pointer' }}>
+                <img src="/src/logo/siksha-logo.png" alt="Siksha Logo" style={{ borderRadius: '0.375rem', objectFit: 'contain', width: '20%', height: '20%' }} />
             </div>
-            
+
             <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-foreground" onClick={onNavigateToLanding} style={{ cursor: 'pointer' }}>
+              <h1 className="text-3xl font-bold text-foreground" onClick={onNavigateToLanding} style={{ cursor: 'pointer' }}>
                 Welcome to Siddhanta AI Tools
               </h1>
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 This is a set of AI powered tools that allows scholars and operators to create content for courses in a seamless and scaleable manner
               </p>
             </div>
-            
+
             <div className="pt-8 space-y-6">
-              <h2 className="text-2xl font-semibold text-foreground">
-                What would you like to do today?
-              </h2>
-              
+              <h2 className="text-2xl font-semibold text-foreground">What would you like to do today?</h2>
+
               {/* View Submissions Button */}
               <div className="flex justify-center">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={onNavigateToJobStatus}
                   className="flex items-center space-x-2 hover:border-primary hover:text-primary"
                 >
@@ -115,46 +110,37 @@ export function LandingPage({
             </div>
           </div>
 
-          {/* Action Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Action Cards (shorter) */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             {actionCards.map((card) => (
-              <Card 
-                key={card.id} 
+              <Card
+                key={card.id}
                 className="hover:shadow-lg transition-all duration-200 hover:border-primary/20 cursor-pointer group"
                 onClick={() => handleActionClick(card.action)}
               >
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-4">
-                      <div className="text-4xl flex-shrink-0">
-                        {card.emoji}
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                          {card.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm leading-relaxed">
-                          {card.description}
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                      </div>
-                    </div>
-                    <div className="pt-2">
-                      <Button 
-                        variant="outline" 
-                        className="w-full group-hover:border-primary group-hover:text-primary"
-                        onClick={(e: React.MouseEvent) => {
-                          e.stopPropagation();
-                          handleActionClick(card.action);
-                        }}
-                      >
-                        <card.icon className="h-4 w-4 mr-2" />
-                        Get Started
-                      </Button>
-                    </div>
+                <CardContent className="p-4 flex flex-col items-center text-center space-y-2">
+                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                    <card.icon className="h-6 w-6 text-primary" />
                   </div>
+
+                  <h3 className="font-semibold text-base group-hover:text-primary transition-colors">
+                    {card.title}
+                  </h3>
+
+                  <p className="text-muted-foreground text-xs leading-snug">
+                    {card.description}
+                  </p>
+
+                  <Button
+                    variant="outline"
+                    className="w-full mt-2 group-hover:border-primary group-hover:text-primary"
+                    onClick={(e: React.MouseEvent) => {
+                      e.stopPropagation();
+                      handleActionClick(card.action);
+                    }}
+                  >
+                    Get Started
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -165,18 +151,13 @@ export function LandingPage({
             <div className="space-y-6">
               <div className="border-t border-border pt-12">
                 <div className="text-center mb-8">
-                  <h2 className="text-2xl font-semibold text-foreground">
-                    Recent Assessment Batches
-                  </h2>
+                  <h2 className="text-2xl font-semibold text-foreground">Recent Assessment Batches</h2>
                   <p className="text-muted-foreground mt-2">
                     Your recent assessment generation requests and downloads
                   </p>
                 </div>
-                
-                <AssessmentResults 
-                  assessments={assessments}
-                  onDownload={onDownload}
-                />
+
+                <AssessmentResults assessments={assessments} onDownload={onDownload} />
               </div>
             </div>
           )}

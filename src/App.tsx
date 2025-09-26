@@ -4,6 +4,9 @@ import { FormPage } from './pages/FormPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { getAssessments, getUser } from './services/api';
 import type { Assessment, User, PagedAssessments } from './types';
+import { Toaster } from './components/ui/sonner';
+import { toast } from 'sonner';
+import './styles/globals.css';
 
 type View = 'landing' | 'form' | 'results';
 
@@ -20,7 +23,7 @@ export default function App() {
       setPagedAssessments(data);
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
-      // Optionally, show an error to the user
+      toast.error("Failed to fetch assessments.");
     } finally {
       setIsLoading(false);
     }
@@ -36,6 +39,7 @@ export default function App() {
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
+        toast.error("Failed to fetch initial data.");
       }
     };
     fetchInitialData();
@@ -45,13 +49,15 @@ export default function App() {
     // After creating, refresh the first page to see the new assessment
     fetchAssessments(1);
     setCurrentView('results');
+    toast.success("Assessment created successfully!");
   }
 
   const handleDownload = (assessment: Assessment) => {
     if (assessment.downloadUrl) {
       window.open(assessment.downloadUrl, '_blank');
+      toast.success("Downloading assessment...");
     } else {
-      alert('Download not available.');
+      toast.error('Download not available.');
     }
   };
 
@@ -62,38 +68,37 @@ export default function App() {
     onNavigateToLanding: handleNavigateToLanding,
   };
 
-  if (currentView === 'landing') {
-    return (
-      <LandingPage 
-        {...commonProps}
-        assessments={pagedAssessments?.assessments || []}
-        onNavigateToFormativeAssessment={() => setCurrentView('form')}
-        onNavigateToJobStatus={() => setCurrentView('results')}
-        onDownload={handleDownload}
-      />
-    );
-  }
-
-  if (currentView === 'results') {
-    return (
-      <ResultsPage
-        {...commonProps}
-        pagedAssessments={pagedAssessments}
-        onNavigateToForm={() => setCurrentView('form')}
-        onDownload={handleDownload}
-        onPageChange={fetchAssessments}
-        isLoading={isLoading}
-      />
-    );
-  }
-
   return (
-    <FormPage
-      {...commonProps}
-      onAssessmentCreated={handleAssessmentCreated}
-      existingAssessments={pagedAssessments?.assessments || []}
-      onNavigateToResults={() => setCurrentView('results')}
-      onDownload={handleDownload}
-    />
+    <>
+      <Toaster position="top-right" closeButton />
+      {currentView === 'landing' && (
+        <LandingPage 
+          {...commonProps}
+          assessments={pagedAssessments?.assessments || []}
+          onNavigateToFormativeAssessment={() => setCurrentView('form')}
+          onNavigateToJobStatus={() => setCurrentView('results')}
+          onDownload={handleDownload}
+        />
+      )}
+      {currentView === 'results' && (
+        <ResultsPage
+          {...commonProps}
+          pagedAssessments={pagedAssessments}
+          onNavigateToForm={() => setCurrentView('form')}
+          onDownload={handleDownload}
+          onPageChange={fetchAssessments}
+          isLoading={isLoading}
+        />
+      )}
+      {currentView === 'form' && (
+        <FormPage
+          {...commonProps}
+          onAssessmentCreated={handleAssessmentCreated}
+          existingAssessments={pagedAssessments?.assessments || []}
+          onNavigateToResults={() => setCurrentView('results')}
+          onDownload={handleDownload}
+        />
+      )}
+    </>
   );
 }
