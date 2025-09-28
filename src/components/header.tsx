@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { 
@@ -18,7 +18,7 @@ interface HeaderProps {
   onNavigateToLanding?: () => void;
 }
 
-export function Header({ 
+function Headers({ 
   sectionName = "Assessment Center", 
   user,
   onNavigateToLanding
@@ -83,3 +83,5 @@ export function Header({
     </header>
   );
 }
+
+export const Header = memo(Headers);

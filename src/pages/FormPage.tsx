@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -24,6 +24,7 @@ interface FormPageProps {
   onDownload: (assessment: Assessment) => void;
 }
 
+
 const initialFormData: FormData = {
   name: '',
   batchName: '',
@@ -38,7 +39,7 @@ const initialFormData: FormData = {
   consolidatedOutput: false,
 };
 
-export function FormPage({
+export default function FormPage({
   onAssessmentCreated,
   existingAssessments,
   onNavigateToLanding,
@@ -49,9 +50,13 @@ export function FormPage({
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (field: keyof FormData, value: any) => {
+  const handleInputChange = useCallback((field: keyof FormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  },[]);
+
+  const handleCourseChange = useCallback((course: string) => handleInputChange('courseName', course), [handleInputChange]);
+  const handleModulesChange = useCallback((modules: string[]) => handleInputChange('selectedModules', modules), [handleInputChange]);
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('name', e.target.value);
 
   const resetForm = () => {
     setFormData(initialFormData);
@@ -107,7 +112,7 @@ export function FormPage({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label htmlFor="name">Assessment Name <span className="text-destructive">*</span></Label>
-                        <Input id="name" placeholder="Enter assessment name" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} required />
+                        <Input id="name" placeholder="Enter assessment name" value={formData.name} onChange={handleNameChange} required />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="testcase">Test Case <span className="text-destructive">*</span></Label>
@@ -131,7 +136,7 @@ export function FormPage({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label>Question Format <span className="text-destructive">*</span></Label>
-                        <Select value={formData.questionFormat} onValueChange={(value) => handleInputChange('questionFormat', value)} required>
+                        <Select value={formData.questionFormat} onValueChange={(value: string) => handleInputChange('questionFormat', value)} required>
                           <SelectTrigger><SelectValue placeholder="Select question format" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="MultipleChoice">Multiple Choice</SelectItem>
@@ -143,7 +148,7 @@ export function FormPage({
                       </div>
                       <div className="space-y-2">
                         <Label>Question Tone <span className="text-destructive">*</span></Label>
-                        <Select value={formData.questionTone} onValueChange={(value) => handleInputChange('questionTone', value)} required>
+                        <Select value={formData.questionTone} onValueChange={(value: string) => handleInputChange('questionTone', value)} required>
                           <SelectTrigger><SelectValue placeholder="Select question tone" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="conversational">Conversational</SelectItem>
@@ -166,8 +171,8 @@ export function FormPage({
                     <CourseModuleSelector
                       selectedCourse={formData.courseName}
                       selectedModules={formData.selectedModules}
-                      onCourseChange={(course) => handleInputChange('courseName', course)}
-                      onModulesChange={(modules) => handleInputChange('selectedModules', modules)}
+                      onCourseChange={handleCourseChange}
+                      onModulesChange={handleModulesChange}
                     />
                   </div>
                 </div>
@@ -182,7 +187,7 @@ export function FormPage({
                       <div className="space-y-4">
                         <Label>Difficulty Level <span className="text-destructive">*</span></Label>
                         <div className="px-2 max-w-md">
-                          <Slider value={formData.difficultyLevel} onValueChange={(value) => handleInputChange('difficultyLevel', value)} max={10} min={1} step={1} />
+                          <Slider value={formData.difficultyLevel} onValueChange={(value: number[]) => handleInputChange('difficultyLevel', value)} max={10} min={1} step={1} />
                           <div className="flex justify-between text-sm text-muted-foreground mt-2">
                             <span>Easy (1)</span>
                             <span className="font-medium">Level: {formData.difficultyLevel[0]}</span>
@@ -193,7 +198,7 @@ export function FormPage({
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <Label>Output Format <span className="text-destructive">*</span></Label>
-                          <Select value={formData.outputFormat} onValueChange={(value) => handleInputChange('outputFormat', value)} required>
+                          <Select value={formData.outputFormat} onValueChange={(value: string) => handleInputChange('outputFormat', value)} required>
                             <SelectTrigger><SelectValue placeholder="Select output format" /></SelectTrigger>
                             <SelectContent>
                               <SelectItem value="GIFT">GIFT</SelectItem>
@@ -204,7 +209,7 @@ export function FormPage({
                         <div className="space-y-2">
                           <Label>Language</Label>
                           <div className="flex items-center space-x-2">
-                            <Select value={formData.language} onValueChange={(value) => handleInputChange('language', value)}>
+                            <Select value={formData.language} onValueChange={(value: string) => handleInputChange('language', value)}>
                               <SelectTrigger className="flex-1"><SelectValue placeholder="Select language" /></SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="English">English</SelectItem>
@@ -223,7 +228,7 @@ export function FormPage({
                       <div className="space-y-3">
                         <Label htmlFor="consolidatedOutput">Output Delivery</Label>
                         <div className="flex items-center space-x-3 p-4 border border-border rounded-lg">
-                          <Switch id="consolidatedOutput" checked={formData.consolidatedOutput} onCheckedChange={(checked) => handleInputChange('consolidatedOutput', checked)} />
+                          <Switch id="consolidatedOutput" checked={formData.consolidatedOutput} onCheckedChange={(checked: boolean) => handleInputChange('consolidatedOutput', checked)} />
                           <div className="space-y-1">
                             <Label htmlFor="consolidatedOutput" className="cursor-pointer">Consolidated Output (Zip File)</Label>
                             <p className="text-sm text-muted-foreground">

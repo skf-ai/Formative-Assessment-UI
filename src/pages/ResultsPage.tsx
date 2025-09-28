@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from '../components/ui/button';
 import { Header } from '../components/header';
 import { PageHeader } from '../components/page-header';
@@ -17,7 +17,7 @@ interface ResultsPageProps {
   isLoading: boolean;
 }
 
-export function ResultsPage({
+export default function ResultsPage({
   pagedAssessments,
   onNavigateToLanding,
   onNavigateToForm,
@@ -28,17 +28,17 @@ export function ResultsPage({
 }: ResultsPageProps) {
   const { assessments, currentPage, totalPages, totalAssessments } = pagedAssessments || {};
 
-  const handlePrevPage = () => {
+  const handlePrevPage = useCallback(() => {
     if (currentPage && currentPage > 1) {
       onPageChange(currentPage - 1);
     }
-  };
+  }, [currentPage, onPageChange]);
 
-  const handleNextPage = () => {
+  const handleNextPage = useCallback(() => {
     if (currentPage && totalPages && currentPage < totalPages) {
       onPageChange(currentPage + 1);
     }
-  };
+  }, [currentPage, totalPages, onPageChange]);
 
   return (
     <div className="min-h-screen bg-background">

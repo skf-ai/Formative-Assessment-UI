@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { LucideIcon } from 'lucide-react';
 
 interface PageHeaderProps {
@@ -8,7 +8,7 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-export function PageHeader({ title, description, icon: Icon, children }: PageHeaderProps) {
+function PageHeaders({ title, description, icon: Icon, children }: PageHeaderProps) {
   return (
     <div className="border-b border-border bg-white">
       <div className="px-6 py-8">
@@ -38,3 +38,5 @@ export function PageHeader({ title, description, icon: Icon, children }: PageHea
     </div>
   );
 }
+
+export const PageHeader = memo(PageHeaders);

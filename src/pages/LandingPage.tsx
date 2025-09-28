@@ -50,7 +50,7 @@ const actionCards = [
   }
 ];
 
-export function LandingPage({ 
+export default function LandingPage({ 
   assessments, 
   onNavigateToFormativeAssessment, 
   onNavigateToJobStatus,

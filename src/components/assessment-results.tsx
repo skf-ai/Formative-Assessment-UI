@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -33,7 +33,7 @@ interface AssessmentResultsProps {
   onDownload: (assessment: Assessment) => void;
 }
 
-export function AssessmentResults({ 
+function AssessmentResult({ 
   assessments, 
   onDownload 
 }: AssessmentResultsProps) {
@@ -227,3 +227,5 @@ export function AssessmentResults({
     </Card>
   );
 }
+
+export const AssessmentResults = memo(AssessmentResult);

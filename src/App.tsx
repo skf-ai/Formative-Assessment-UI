@@ -1,7 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { LandingPage } from './pages/LandingPage';
-import { FormPage } from './pages/FormPage';
-import { ResultsPage } from './pages/ResultsPage';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
+//import { LandingPage } from './pages/LandingPage';
+const LandingPage = React.lazy(() => import('./pages/LandingPage'));
+//import { FormPage } from './pages/FormPage';
+const FormPage = React.lazy(() => import('./pages/FormPage'));
+//import { ResultsPage } from './pages/ResultsPage';
+const ResultsPage = React.lazy(() => import('./pages/ResultsPage'));
 import { getAssessments, getUser } from './services/api';
 import type { Assessment, User, PagedAssessments } from './types';
 
@@ -64,36 +67,42 @@ export default function App() {
 
   if (currentView === 'landing') {
     return (
-      <LandingPage 
-        {...commonProps}
-        assessments={pagedAssessments?.assessments || []}
-        onNavigateToFormativeAssessment={() => setCurrentView('form')}
-        onNavigateToJobStatus={() => setCurrentView('results')}
-        onDownload={handleDownload}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <LandingPage 
+          {...commonProps}
+          assessments={pagedAssessments?.assessments || []}
+          onNavigateToFormativeAssessment={() => setCurrentView('form')}
+          onNavigateToJobStatus={() => setCurrentView('results')}
+          onDownload={handleDownload}
+        />
+      </Suspense>
     );
   }
 
   if (currentView === 'results') {
     return (
-      <ResultsPage
-        {...commonProps}
-        pagedAssessments={pagedAssessments}
-        onNavigateToForm={() => setCurrentView('form')}
-        onDownload={handleDownload}
-        onPageChange={fetchAssessments}
-        isLoading={isLoading}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <ResultsPage
+          {...commonProps}
+          pagedAssessments={pagedAssessments}
+          onNavigateToForm={() => setCurrentView('form')}
+          onDownload={handleDownload}
+          onPageChange={fetchAssessments}
+          isLoading={isLoading}
+        />
+      </Suspense>
     );
   }
 
   return (
-    <FormPage
-      {...commonProps}
-      onAssessmentCreated={handleAssessmentCreated}
-      existingAssessments={pagedAssessments?.assessments || []}
-      onNavigateToResults={() => setCurrentView('results')}
-      onDownload={handleDownload}
-    />
+    <Suspense fallback={<div>Loading...</div>}>
+      <FormPage
+        {...commonProps}
+        onAssessmentCreated={handleAssessmentCreated}
+        existingAssessments={pagedAssessments?.assessments || []}
+        onNavigateToResults={() => setCurrentView('results')}
+        onDownload={handleDownload}
+      />
+    </Suspense>
   );
 }

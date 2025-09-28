@@ -3,6 +3,7 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
 import { X } from 'lucide-react';
+import { memo } from 'react';
 
 interface CourseModuleSelectorProps {
   selectedCourse: string;
@@ -63,7 +64,7 @@ const modulesByCourse: Record<string, string[]> = {
   ]
 };
 
-export function CourseModuleSelector({
+function CourseModuleSelectors({
   selectedCourse,
   selectedModules,
   onCourseChange,
@@ -181,3 +182,5 @@ export function CourseModuleSelector({
     </div>
   );
 }
+
+export const CourseModuleSelector = memo(CourseModuleSelectors);
