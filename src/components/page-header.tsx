@@ -11,8 +11,8 @@ interface PageHeaderProps {
 export function PageHeader({ title, description, icon: Icon, children }: PageHeaderProps) {
   return (
     <div className="border-b border-border bg-background">
-      <div className="px-6 py-8">
-        <div className="flex items-start justify-between">
+      <div className="px-4 sm:px-6 py-4 sm:py-6">
+        <div className="flex flex-row items-center justify-between gap-4">
           <div className="space-y-2">
             <div className="flex items-center space-x-3">
               {Icon && (
@@ -21,15 +21,15 @@ export function PageHeader({ title, description, icon: Icon, children }: PageHea
                 </div>
               )}
               <div>
-                <h1 className="text-3xl font-bold text-foreground">{title}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{title}</h1>
                 {description && (
-                  <p className="text-muted-foreground mt-1 max-w-2xl">{description}</p>
+                  <p className="text-muted-foreground mt-1 max-w-2xl hidden sm:block">{description}</p>
                 )}
               </div>
             </div>
           </div>
           {children && (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 flex-shrink-0">
               {children}
             </div>
           )}

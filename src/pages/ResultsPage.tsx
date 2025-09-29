@@ -51,13 +51,13 @@ export function ResultsPage({
         <div className="flex items-center space-x-2">
           <Badge variant="outline" className="text-sm font-medium">{totalAssessments || 0} Batches</Badge>
         </div>
-        <Button variant="outline" size="sm" onClick={onNavigateToLanding}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToLanding}>
           <Home className="h-4 w-4 mr-2" />
-          Home
+          <span className="hidden sm:inline">Home</span>
         </Button>
-        <Button variant="default" size="sm" onClick={onNavigateToForm}>
+        <Button variant="default" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToForm}>
           <FileText className="h-4 w-4 mr-2" />
-          Create New Assessment
+          <span className="hidden sm:inline">Create New Assessment</span>
         </Button>
       </PageHeader>
 

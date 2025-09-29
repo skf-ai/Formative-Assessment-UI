@@ -81,17 +81,17 @@ export function FormPage({
         description="Use the form below to create a formative assessment for a course by selecting modules from your course content."
         icon={FileText}
       >
-        <Button variant="outline" size="sm" onClick={onNavigateToLanding}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToLanding}>
           <Home className="h-4 w-4 mr-2" />
-          Home
+          <span className="hidden sm:inline">Home</span>
         </Button>
-        <Button variant="outline" size="sm" onClick={onNavigateToResults}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToResults}>
           <List className="h-4 w-4 mr-2" />
-          View Submissions
+          <span className="hidden sm:inline">View Submissions</span>
         </Button>
-        <Button variant="outline" size="sm" onClick={resetForm}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={resetForm}>
           <RotateCcw className="h-4 w-4 mr-2" />
-          Reset Form
+          <span className="hidden sm:inline">Reset Form</span>
         </Button>
       </PageHeader>
 
