@@ -41,7 +41,7 @@ export function ResultsPage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header sectionName="Assessment Center" user={user} onNavigateToLanding={onNavigateToLanding} />
 
       <PageHeader
@@ -64,7 +64,7 @@ export function ResultsPage({
       <main className="p-6">
         <div className="max-w-7xl mx-auto">
           {isLoading ? (
-            <div className="text-center py-20 text-gray-500">Loading...</div>
+            <div className="text-center py-20 text-muted-foreground">Loading...</div>
           ) : (
             <AssessmentResults
               assessments={assessments || []}
@@ -83,7 +83,7 @@ export function ResultsPage({
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Previous
               </Button>
-              <span className="text-sm font-medium text-gray-600">
+              <span className="text-sm font-medium text-muted-foreground">
                 Page {currentPage} of {totalPages}
               </span>
               <Button

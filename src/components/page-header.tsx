@@ -10,7 +10,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, icon: Icon, children }: PageHeaderProps) {
   return (
-    <div className="border-b border-border bg-white">
+    <div className="border-b border-border bg-background">
       <div className="px-6 py-8">
         <div className="flex items-start justify-between">
           <div className="space-y-2">

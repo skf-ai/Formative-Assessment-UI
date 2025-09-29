@@ -73,7 +73,7 @@ export function FormPage({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <Header sectionName="Assessment Center" user={user} onNavigateToLanding={onNavigateToLanding} />
       
       <PageHeader
@@ -97,12 +97,12 @@ export function FormPage({
 
       <main className="p-6">
         <div className="max-w-4xl mx-auto">
-          <Card className="shadow-lg">
+          <Card>
             <CardContent className="p-8">
               <form onSubmit={handleSubmit} className="space-y-10">
                 {/* Basic Information Section */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-gray-800 border-b pb-3">Basic Information</h3>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Basic Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Assessment Name <span className="text-destructive">*</span></Label>
@@ -117,7 +117,7 @@ export function FormPage({
 
                 {/* Assessment Configuration */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-gray-800 border-b pb-3">Assessment Configuration</h3>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Assessment Configuration</h3>
                   <div className="space-y-6 pt-4">
                     <div className="space-y-2">
                       <Label htmlFor="batchName">Batch Name <span className="text-destructive">*</span></Label>
@@ -155,7 +155,7 @@ export function FormPage({
 
                 {/* Course and Module Selection */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-gray-800 border-b pb-3">Course & Module Selection</h3>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Course & Module Selection</h3>
                   <div className="pt-4">
                     <CourseModuleSelector
                       selectedCourse={formData.courseName}
@@ -168,7 +168,7 @@ export function FormPage({
 
                 {/* Output Settings */}
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-gray-800 border-b pb-3">Output Settings</h3>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Output Settings</h3>
                   <div className="space-y-8 pt-4">
                     <div className="space-y-4">
                       <Label>Difficulty Level: <span className="font-bold text-primary">{formData.difficultyLevel[0]}</span></Label>
@@ -207,7 +207,7 @@ export function FormPage({
                     </div>
                     <div className="space-y-3">
                       <Label htmlFor="consolidatedOutput">Output Delivery</Label>
-                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-gray-50">
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/50">
                         <Switch id="consolidatedOutput" checked={formData.consolidatedOutput} onCheckedChange={(checked) => handleInputChange('consolidatedOutput', checked)} />
                         <div>
                           <Label htmlFor="consolidatedOutput" className="cursor-pointer font-medium">Consolidated Output (Zip File)</Label>
