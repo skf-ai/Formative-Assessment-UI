@@ -81,58 +81,54 @@ export function FormPage({
         description="Use the form below to create a formative assessment for a course by selecting modules from your course content."
         icon={FileText}
       >
-        <Button variant="outline" size="sm" onClick={onNavigateToLanding}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToLanding}>
           <Home className="h-4 w-4 mr-2" />
-          Home
+          <span className="hidden sm:inline">Home</span>
         </Button>
-        <Button variant="outline" size="sm" onClick={onNavigateToResults}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToResults}>
           <List className="h-4 w-4 mr-2" />
-          View Submissions
+          <span className="hidden sm:inline">View Submissions</span>
         </Button>
-        <Button variant="outline" size="sm" onClick={resetForm}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={resetForm}>
           <RotateCcw className="h-4 w-4 mr-2" />
-          Reset Form
+          <span className="hidden sm:inline">Reset Form</span>
         </Button>
       </PageHeader>
 
-      <div className="p-6">
+      <main className="p-6">
         <div className="max-w-4xl mx-auto">
           <Card>
             <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-10">
                 {/* Basic Information Section */}
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Assessment Name <span className="text-destructive">*</span></Label>
-                        <Input id="name" placeholder="Enter assessment name" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="testcase">Test Case <span className="text-destructive">*</span></Label>
-                        <Input id="testcase" placeholder="Enter a descriptive case name" value={formData.testCase} onChange={(e) => handleInputChange('testCase', e.target.value)} required />
-                      </div>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Basic Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Assessment Name <span className="text-destructive">*</span></Label>
+                      <Input id="name" placeholder="e.g., Chapter 1 Quiz" value={formData.name} onChange={(e) => handleInputChange('name', e.target.value)} required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="testcase">Test Case <span className="text-destructive">*</span></Label>
+                      <Input id="testcase" placeholder="e.g., Mid-term Review" value={formData.testCase} onChange={(e) => handleInputChange('testCase', e.target.value)} required />
                     </div>
                   </div>
                 </div>
 
-                <Separator />
-
                 {/* Assessment Configuration */}
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Assessment Configuration</h3>
-                    <div className="space-y-2 mb-6">
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Assessment Configuration</h3>
+                  <div className="space-y-6 pt-4">
+                    <div className="space-y-2">
                       <Label htmlFor="batchName">Batch Name <span className="text-destructive">*</span></Label>
                       <Input id="batchName" placeholder="e.g., Spring2024_Module1" value={formData.batchName} onChange={(e) => handleInputChange('batchName', e.target.value)} required className="max-w-md" />
-                      <p className="text-sm text-muted-foreground">Choose a descriptive name to identify this assessment batch.</p>
+                      <p className="text-sm text-muted-foreground">A unique name to identify this assessment batch.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
                         <Label>Question Format <span className="text-destructive">*</span></Label>
                         <Select value={formData.questionFormat} onValueChange={(value) => handleInputChange('questionFormat', value)} required>
-                          <SelectTrigger><SelectValue placeholder="Select question format" /></SelectTrigger>
+                          <SelectTrigger><SelectValue placeholder="Select format" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="MultipleChoice">Multiple Choice</SelectItem>
                             <SelectItem value="FillInTheBlanks">Fill in the Blanks</SelectItem>
@@ -144,7 +140,7 @@ export function FormPage({
                       <div className="space-y-2">
                         <Label>Question Tone <span className="text-destructive">*</span></Label>
                         <Select value={formData.questionTone} onValueChange={(value) => handleInputChange('questionTone', value)} required>
-                          <SelectTrigger><SelectValue placeholder="Select question tone" /></SelectTrigger>
+                          <SelectTrigger><SelectValue placeholder="Select tone" /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="conversational">Conversational</SelectItem>
                             <SelectItem value="direct">Direct</SelectItem>
@@ -157,12 +153,10 @@ export function FormPage({
                   </div>
                 </div>
 
-                <Separator />
-
                 {/* Course and Module Selection */}
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Course and Module Selection</h3>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Course & Module Selection</h3>
+                  <div className="pt-4">
                     <CourseModuleSelector
                       selectedCourse={formData.courseName}
                       selectedModules={formData.selectedModules}
@@ -172,64 +166,54 @@ export function FormPage({
                   </div>
                 </div>
 
-                <Separator />
-
                 {/* Output Settings */}
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Output Settings</h3>
-                    <div className="space-y-6">
-                      <div className="space-y-4">
-                        <Label>Difficulty Level <span className="text-destructive">*</span></Label>
-                        <div className="px-2 max-w-md">
-                          <Slider value={formData.difficultyLevel} onValueChange={(value) => handleInputChange('difficultyLevel', value)} max={10} min={1} step={1} />
-                          <div className="flex justify-between text-sm text-muted-foreground mt-2">
-                            <span>Easy (1)</span>
-                            <span className="font-medium">Level: {formData.difficultyLevel[0]}</span>
-                            <span>Hard (10)</span>
-                          </div>
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Output Settings</h3>
+                  <div className="space-y-8 pt-4">
+                    <div className="space-y-4">
+                      <Label>Difficulty Level: <span className="font-bold text-primary">{formData.difficultyLevel[0]}</span></Label>
+                      <div className="px-2 max-w-md">
+                        <Slider value={formData.difficultyLevel} onValueChange={(value) => handleInputChange('difficultyLevel', value)} max={10} min={1} step={1} />
+                        <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                          <span>Easy</span>
+                          <span>Hard</span>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label>Output Format <span className="text-destructive">*</span></Label>
-                          <Select value={formData.outputFormat} onValueChange={(value) => handleInputChange('outputFormat', value)} required>
-                            <SelectTrigger><SelectValue placeholder="Select output format" /></SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="GIFT">GIFT</SelectItem>
-                              <SelectItem value="CSV">CSV</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Language</Label>
-                          <div className="flex items-center space-x-2">
-                            <Select value={formData.language} onValueChange={(value) => handleInputChange('language', value)}>
-                              <SelectTrigger className="flex-1"><SelectValue placeholder="Select language" /></SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="English">English</SelectItem>
-                                <SelectItem value="Spanish">Spanish</SelectItem>
-                                <SelectItem value="French">French</SelectItem>
-                                <SelectItem value="German">German</SelectItem>
-                                <SelectItem value="Portuguese">Portuguese</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            {formData.language && (
-                              <Button type="button" variant="outline" size="sm" onClick={() => handleInputChange('language', '')} className="whitespace-nowrap">Clear</Button>
-                            )}
-                          </div>
-                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label>Output Format <span className="text-destructive">*</span></Label>
+                        <Select value={formData.outputFormat} onValueChange={(value) => handleInputChange('outputFormat', value)} required>
+                          <SelectTrigger><SelectValue placeholder="Select format" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="GIFT">GIFT</SelectItem>
+                            <SelectItem value="CSV">CSV</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
-                      <div className="space-y-3">
-                        <Label htmlFor="consolidatedOutput">Output Delivery</Label>
-                        <div className="flex items-center space-x-3 p-4 border border-border rounded-lg">
-                          <Switch id="consolidatedOutput" checked={formData.consolidatedOutput} onCheckedChange={(checked) => handleInputChange('consolidatedOutput', checked)} />
-                          <div className="space-y-1">
-                            <Label htmlFor="consolidatedOutput" className="cursor-pointer">Consolidated Output (Zip File)</Label>
-                            <p className="text-sm text-muted-foreground">
-                              {formData.consolidatedOutput ? 'All assessment files will be packaged in a single zip file' : 'Assessment files will be provided separately'}
-                            </p>
-                          </div>
+                      <div className="space-y-2">
+                        <Label>Language</Label>
+                        <Select value={formData.language} onValueChange={(value) => handleInputChange('language', value)}>
+                          <SelectTrigger><SelectValue placeholder="Select language" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Spanish">Spanish</SelectItem>
+                            <SelectItem value="French">French</SelectItem>
+                            <SelectItem value="German">German</SelectItem>
+                            <SelectItem value="Portuguese">Portuguese</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="consolidatedOutput">Output Delivery</Label>
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/50">
+                        <Switch id="consolidatedOutput" checked={formData.consolidatedOutput} onCheckedChange={(checked) => handleInputChange('consolidatedOutput', checked)} />
+                        <div>
+                          <Label htmlFor="consolidatedOutput" className="cursor-pointer font-medium">Consolidated Output (Zip File)</Label>
+                          <p className="text-sm text-muted-foreground">
+                            {formData.consolidatedOutput ? 'All files will be packaged in a single zip.' : 'Files will be provided separately.'}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -237,11 +221,11 @@ export function FormPage({
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-6">
+                <div className="pt-6 border-t mt-10">
                   <div className="flex justify-end space-x-4">
                     <Button type="button" variant="outline" size="lg" onClick={onNavigateToLanding} disabled={isSubmitting}>Cancel</Button>
-                    <Button type="submit" size="lg" className="min-w-[160px]" disabled={isSubmitting}>
-                      {isSubmitting ? 'Creating...' : <><FileText className="h-4 w-4 mr-2" /> Create Assessment</>}
+                    <Button type="submit" size="lg" className="min-w-[180px]" disabled={isSubmitting}>
+                      {isSubmitting ? 'Creating...' : <><FileText className="h-5 w-5 mr-2" /> Create Assessment</>}
                     </Button>
                   </div>
                 </div>
@@ -249,12 +233,14 @@ export function FormPage({
             </CardContent>
           </Card>
 
-          <div className="mt-12">
-            <h2 className="text-2xl font-semibold text-center mb-8">Existing Assessments</h2>
-            <AssessmentResults assessments={existingAssessments} onDownload={onDownload} />
-          </div>
+          {existingAssessments.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-semibold text-center mb-8">Existing Assessments</h2>
+              <AssessmentResults assessments={existingAssessments} onDownload={onDownload} />
+            </div>
+          )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

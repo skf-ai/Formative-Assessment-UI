@@ -12,13 +12,11 @@ const mockUser: User = {
  * Simulates fetching user data from an API.
  */
 export const getUser = async (): Promise<User> => {
-  console.log('API: Fetching user...');
   // In a real app, you would make a fetch request to your user endpoint
   // const response = await fetch('/api/user');
   // if (!response.ok) throw new Error('Failed to fetch user');
   // return await response.json();
   await new Promise(resolve => setTimeout(resolve, 200));
-  console.log('API: User fetched successfully.');
   return mockUser;
 };
 
@@ -27,12 +25,10 @@ export const getUser = async (): Promise<User> => {
  * Simulates fetching course data from an API.
  */
 export const getCourse = async (): Promise<Course> => {
-  console.log('API: Fetching course data...');
   // const response = await fetch('/api/course');
   // if (!response.ok) throw new Error('Failed to fetch course');
   // return await response.json();
   await new Promise(resolve => setTimeout(resolve, 300));
-  console.log('API: Course data fetched successfully.');
   return mockCourse;
 };
 
@@ -40,7 +36,6 @@ export const getCourse = async (): Promise<Course> => {
  * Simulates fetching assessments with pagination.
  */
 export const getAssessments = async (page: number = 1, limit: number = 10): Promise<PagedAssessments> => {
-  console.log(`API: Fetching assessments (page: ${page}, limit: ${limit})...`);
   // const response = await fetch(`/api/assessments?page=${page}&limit=${limit}`);
   // if (!response.ok) throw new Error('Failed to fetch assessments');
   // return await response.json();
@@ -52,7 +47,6 @@ export const getAssessments = async (page: number = 1, limit: number = 10): Prom
   const paginatedAssessments = assessments.slice(start, end);
   const totalPages = Math.ceil(assessments.length / limit);
 
-  console.log(`API: Assessments fetched. Returning ${paginatedAssessments.length} items.`);
 
   return {
     assessments: paginatedAssessments,
@@ -88,7 +82,6 @@ const generateBatchCode = (batchName: string, existingAssessments: Assessment[])
  * Simulates creating a new assessment and storing it.
  */
 export const createAssessment = async (formData: FormData, existingAssessments: Assessment[]): Promise<Assessment> => {
-  console.log('API: Creating new assessment...');
   // const response = await fetch('/api/assessments', { 
   //   method: 'POST', 
   //   headers: { 'Content-Type': 'application/json' },
@@ -118,7 +111,6 @@ export const createAssessment = async (formData: FormData, existingAssessments: 
   };
 
   assessments.unshift(newAssessment);
-  console.log('API: Assessment created successfully.');
 
   return newAssessment;
 };

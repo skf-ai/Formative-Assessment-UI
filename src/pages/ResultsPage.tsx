@@ -49,22 +49,22 @@ export function ResultsPage({
         description="Monitor your assessment generation progress and download completed files."
       >
         <div className="flex items-center space-x-2">
-          <Badge variant="outline">{totalAssessments || 0} Batches</Badge>
+          <Badge variant="outline" className="text-sm font-medium">{totalAssessments || 0} Batches</Badge>
         </div>
-        <Button variant="outline" size="sm" onClick={onNavigateToLanding}>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToLanding}>
           <Home className="h-4 w-4 mr-2" />
-          Home
+          <span className="hidden sm:inline">Home</span>
         </Button>
-        <Button variant="outline" size="sm" onClick={onNavigateToForm}>
+        <Button variant="default" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToForm}>
           <FileText className="h-4 w-4 mr-2" />
-          Create Assessment
+          <span className="hidden sm:inline">Create New Assessment</span>
         </Button>
       </PageHeader>
 
-      <div className="p-6">
+      <main className="p-6">
         <div className="max-w-7xl mx-auto">
           {isLoading ? (
-            <div className="text-center py-12">Loading...</div>
+            <div className="text-center py-20 text-muted-foreground">Loading...</div>
           ) : (
             <AssessmentResults
               assessments={assessments || []}
@@ -73,7 +73,7 @@ export function ResultsPage({
           )}
 
           {pagedAssessments && pagedAssessments.totalPages > 1 && (
-            <div className="flex items-center justify-center space-x-4 mt-8">
+            <div className="flex items-center justify-center space-x-4 mt-10">
               <Button
                 variant="outline"
                 size="sm"
@@ -83,7 +83,7 @@ export function ResultsPage({
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Previous
               </Button>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm font-medium text-muted-foreground">
                 Page {currentPage} of {totalPages}
               </span>
               <Button
@@ -98,7 +98,7 @@ export function ResultsPage({
             </div>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }
