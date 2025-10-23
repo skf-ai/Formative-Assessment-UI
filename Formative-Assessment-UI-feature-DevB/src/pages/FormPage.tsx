@@ -1,0 +1,255 @@
+import React, { useState, useCallback, memo } from 'react';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Slider } from '../components/ui/slider';
+import { Switch } from '../components/ui/switch';
+import { Header } from '../components/header';
+import { PageHeader } from '../components/page-header';
+import { CourseModuleSelector } from '../components/course-module-selector';
+import { AssessmentResults } from '../components/assessment-results';
+import { FileText, RotateCcw, List, Home } from 'lucide-react';
+import { createAssessment } from '../services/api';
+import type { Assessment, FormData, User } from '../types';
+
+interface FormPageProps {
+  onAssessmentCreated: (assessment: Assessment) => void;
+  existingAssessments: Assessment[];
+  onNavigateToLanding: () => void;
+  onNavigateToResults: () => void;
+  user: User | null;
+  onDownload: (assessment: Assessment) => void;
+}
+
+const initialFormData: FormData = {
+  name: '',
+  batchName: '',
+  testCase: '',
+  questionFormat: '',
+  questionTone: '',
+  difficultyLevel: [5],
+  outputFormat: '',
+  language: '',
+  courseName: '',
+  selectedModules: [],
+  consolidatedOutput: false,
+};
+
+export const FormPage = memo<FormPageProps>(({
+  onAssessmentCreated,
+  existingAssessments,
+  onNavigateToLanding,
+  onNavigateToResults,
+  user,
+  onDownload,
+}) => {
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleInputChange = useCallback(
+    <Field extends keyof FormData>(field: Field, value: FormData[Field]) => {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    },
+    []
+  );
+
+  const resetForm = useCallback(() => {
+    setFormData(initialFormData);
+  }, []);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const newAssessment = await createAssessment(formData, existingAssessments);
+      onAssessmentCreated(newAssessment);
+      resetForm();
+    } catch (error) {
+      console.error("Failed to create assessment:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData, existingAssessments, onAssessmentCreated, resetForm]);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header sectionName="Assessment Center" user={user} onNavigateToLanding={onNavigateToLanding} />
+      
+      <PageHeader
+        title="Create Formative Assessment"
+        description="Use the form below to create a formative assessment for a course by selecting modules from your course content."
+        icon={FileText}
+      >
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToLanding}>
+          <Home className="h-4 w-4 mr-2" />
+          <span className="hidden sm:inline">Home</span>
+        </Button>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={onNavigateToResults}>
+          <List className="h-4 w-4 mr-2" />
+          <span className="hidden sm:inline">View Submissions</span>
+        </Button>
+        <Button variant="outline" size="sm" className="h-9 w-9 p-0 sm:w-auto sm:px-4 sm:py-2" onClick={resetForm}>
+          <RotateCcw className="h-4 w-4 mr-2" />
+          <span className="hidden sm:inline">Reset Form</span>
+        </Button>
+      </PageHeader>
+
+      <main className="p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card>
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-10">
+                {/* Basic Information Section */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Basic Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Assessment Name <span className="text-destructive">*</span></Label>
+                      {/* FIX 1: Explicitly type 'e' as React.ChangeEvent<HTMLInputElement> */}
+                      <Input id="name" placeholder="e.g., Chapter 1 Quiz" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('name', e.target.value)} required />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="testcase">Test Case <span className="text-destructive">*</span></Label>
+                      {/* FIX 2: Explicitly type 'e' as React.ChangeEvent<HTMLInputElement> */}
+                      <Input id="testcase" placeholder="e.g., Mid-term Review" value={formData.testCase} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('testCase', e.target.value)} required />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Assessment Configuration */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Assessment Configuration</h3>
+                  <div className="space-y-6 pt-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="batchName">Batch Name <span className="text-destructive">*</span></Label>
+                      <Input id="batchName" placeholder="e.g., Spring2024_Module1" value={formData.batchName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleInputChange('batchName', e.target.value)} required className="max-w-md" />
+                      <p className="text-sm text-muted-foreground">A unique name to identify this assessment batch.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label>Question Format <span className="text-destructive">*</span></Label>
+                        {/* FIX 3: Explicitly type 'value' as string */}
+                        <Select value={formData.questionFormat || undefined} onValueChange={(value: string) => handleInputChange('questionFormat', value)} required>
+                          <SelectTrigger><SelectValue placeholder="Select format" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="MultipleChoice">Multiple Choice</SelectItem>
+                            <SelectItem value="FillInTheBlanks">Fill in the Blanks</SelectItem>
+                            <SelectItem value="MatchTheFollowing">Match the Following</SelectItem>
+                            <SelectItem value="TrueFalse">True/False</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Question Tone <span className="text-destructive">*</span></Label>
+                        <Select value={formData.questionTone || undefined} onValueChange={(value: string) => handleInputChange('questionTone', value)} required>
+                          <SelectTrigger><SelectValue placeholder="Select tone" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="conversational">Conversational</SelectItem>
+                            <SelectItem value="direct">Direct</SelectItem>
+                            <SelectItem value="indirect">Indirect</SelectItem>
+                            <SelectItem value="scenario">Scenario</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Course and Module Selection */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Course & Module Selection</h3>
+                  <div className="pt-4">
+                    <CourseModuleSelector
+                      selectedCourse={formData.courseName || ''}
+                      selectedModules={formData.selectedModules}
+                      onCourseChange={(course: string) => handleInputChange('courseName', course)}
+                      onModulesChange={(modules: string[]) => handleInputChange('selectedModules', modules)}
+                    />
+                  </div>
+                </div>
+
+                {/* Output Settings */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-foreground border-b pb-3">Output Settings</h3>
+                  <div className="space-y-8 pt-4">
+                    <div className="space-y-4">
+                      <Label>Difficulty Level: <span className="font-bold text-primary">{formData.difficultyLevel[0]}</span></Label>
+                      <div className="px-2 max-w-md">
+                        {/* FIX 4: Explicitly type 'value' as number[] */}
+                        <Slider value={formData.difficultyLevel} onValueChange={(value: number[]) => handleInputChange('difficultyLevel', value)} max={10} min={1} step={1} />
+                        <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                          <span>Easy</span>
+                          <span>Hard</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label>Output Format <span className="text-destructive">*</span></Label>
+                        {/* FIX 6: Explicitly type 'value' as string */}
+                        <Select value={formData.outputFormat || undefined} onValueChange={(value: string) => handleInputChange('outputFormat', value)} required>
+                          <SelectTrigger><SelectValue placeholder="Select format" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="GIFT">GIFT</SelectItem>
+                            <SelectItem value="CSV">CSV</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Language</Label>
+                        <Select value={formData.language || undefined} onValueChange={(value: string) => handleInputChange('language', value)}>
+                          <SelectTrigger><SelectValue placeholder="Select language" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Spanish">Spanish</SelectItem>
+                            <SelectItem value="French">French</SelectItem>
+                            <SelectItem value="German">German</SelectItem>
+                            <SelectItem value="Portuguese">Portuguese</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <Label htmlFor="consolidatedOutput">Output Delivery</Label>
+                      <div className="flex items-center space-x-3 p-4 border rounded-lg bg-muted/50">
+                        {/* FIX 5: Explicitly type 'checked' as boolean */}
+                        <Switch id="consolidatedOutput" checked={Boolean(formData.consolidatedOutput)} onCheckedChange={(checked: boolean) => handleInputChange('consolidatedOutput', checked)} />
+                        <div>
+                          <Label htmlFor="consolidatedOutput" className="cursor-pointer font-medium">Consolidated Output (Zip File)</Label>
+                          <p className="text-sm text-muted-foreground">
+                            {formData.consolidatedOutput ? 'All files will be packaged in a single zip.' : 'Files will be provided separately.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-6 border-t mt-10">
+                  <div className="flex justify-end space-x-4">
+                    <Button type="button" variant="outline" size="lg" onClick={onNavigateToLanding} disabled={isSubmitting}>Cancel</Button>
+                    <Button type="submit" size="lg" className="min-w-[180px]" disabled={isSubmitting}>
+                      {isSubmitting ? 'Creating...' : <><FileText className="h-5 w-5 mr-2" /> Create Assessment</>}
+                    </Button>
+                  </div>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {existingAssessments.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-semibold text-center mb-8">Existing Assessments</h2>
+              <AssessmentResults assessments={existingAssessments} onDownload={onDownload} />
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
+  );
+});
+
+FormPage.displayName = 'FormPage';
